@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "youcraft-mobile",
-    "slug": "youcraft-mobile",
+    "name": "recalibration-app",
+    "slug": "recalibration-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,7 +21,13 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.waseeq.youcraftmobile"
+      "package": "com.waseeq.recalibrationapp",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -43,7 +49,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "bcd1771d-78b7-4b95-a1e4-d6b064817110"
+        "projectId": "35f03832-04a3-4704-ac28-333c6cfaa79c"
       }
     },
     "owner": "waseeq"
