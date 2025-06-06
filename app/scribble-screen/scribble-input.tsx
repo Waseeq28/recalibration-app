@@ -5,8 +5,8 @@ import { useTheme } from "@/contexts/ThemeContext";
 // import ImagePickerButton from './components/image/image-picker-modal'
 // import AudioRecorder from './components/audio/audio-recorder'
 import { ArrowRightIcon, MicIcon } from "lucide-react-native";
-import SpaceItemMenu from "./components/space-items/space-item-menu";
-import SpaceItemContainer from "./components/space-items/space-item-container";
+// import SpaceItemMenu from './components/space-items/space-item-menu'
+// import SpaceItemContainer from './components/space-items/space-item-container'
 
 type ScribblesInputProps = {
   onSendScribble: (
@@ -27,7 +27,7 @@ export default function ScribblesInput({
 ScribblesInputProps) {
   const { colors } = useTheme();
   const [text, setText] = useState("");
-  const [spaceItems, setSpaceItems] = useState<string[]>([]);
+  // const [spaceItems, setSpaceItems] = useState<string[]>([])
   // const [aiEnabled, setAiEnabled] = useState(initialAiEnabled)
   // const [isRecording, setIsRecording] = useState(false)
 
@@ -38,26 +38,26 @@ ScribblesInputProps) {
   const handleSend = () => {
     const trimmedText = text.trim();
     if (trimmedText) {
-      onSendScribble(trimmedText, spaceItems, false); // hardcoded aiEnabled to false for now
+      onSendScribble(trimmedText, [], false); // hardcoded empty spaceItems and aiEnabled to false for now
       setText("");
-      setSpaceItems([]);
+      // setSpaceItems([])
     }
   };
 
-  const removeSpaceItem = (item: string) => {
-    setSpaceItems(spaceItems.filter((i) => i !== item));
-  };
+  // const removeSpaceItem = (item: string) => {
+  // 	setSpaceItems(spaceItems.filter((i) => i !== item))
+  // }
 
-  const handleSpaceItemSelect = (item: string) => {
-    if (!spaceItems.includes(item)) {
-      setSpaceItems([...spaceItems, item]);
-    }
-  };
+  // const handleSpaceItemSelect = (item: string) => {
+  // 	if (!spaceItems.includes(item)) {
+  // 		setSpaceItems([...spaceItems, item])
+  // 	}
+  // }
 
   const renderInputActions = () => (
     <View className="flex-row justify-between items-center">
       <View className="flex-row items-center gap-3">
-        <SpaceItemMenu onSelectSpaceItem={handleSpaceItemSelect} />
+        {/* <SpaceItemMenu onSelectSpaceItem={handleSpaceItemSelect} /> */}
         {/* {onSendImage && (
 					<>
 						<ImagePickerButton
@@ -133,7 +133,7 @@ ScribblesInputProps) {
           end={{ x: 0.1, y: 0.5 }}
           className="px-4 py-4 rounded-xl"
         >
-          <SpaceItemContainer items={spaceItems} onRemove={removeSpaceItem} />
+          {/* <SpaceItemContainer items={spaceItems} onRemove={removeSpaceItem} /> */}
           <View className="flex-row items-start">
             <TextInput
               className="flex-1 leading-6 py-3 mb-3"
