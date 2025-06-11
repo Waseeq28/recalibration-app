@@ -13,9 +13,9 @@ export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
   const { colors } = useTheme();
 
   return (
-    <View className="flex-row p-2">
+    <View className="flex-row px-2 py-1">
       <TouchableOpacity
-        className="flex-1 flex-row items-center justify-center py-4 px-3 mx-1"
+        className="flex-1 flex-row items-center justify-center py-2 px-3 mx-1"
         style={{
           borderBottomWidth: activeTab === "ai-chat" ? 2 : 0,
           borderBottomColor:
@@ -37,7 +37,7 @@ export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        className="flex-1 flex-row items-center justify-center py-4 px-3 mx-1"
+        className="flex-1 flex-row items-center justify-center py-2 px-3 mx-1"
         style={{
           borderBottomWidth: activeTab === "emotional-profile" ? 2 : 0,
           borderBottomColor:
@@ -57,7 +57,7 @@ export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
                 : colors.text.secondary,
           }}
         >
-          Emotional Profile
+          Emotion Profile
         </Text>
       </TouchableOpacity>
     </View>

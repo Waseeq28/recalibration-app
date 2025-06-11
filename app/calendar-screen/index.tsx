@@ -5,7 +5,8 @@ import { format } from "date-fns";
 import DateHeader from "./components/date-header";
 import WeekCalendarComponent from "./components/week-calendar";
 import TabBar from "./components/tab-bar";
-import TabContent from "./components/tab-content";
+import AiChatTab from "./components/ai-chat-tab";
+import EmotionProfileTab from "./components/emotion-profile-tab";
 
 type TabType = "ai-chat" | "emotional-profile";
 
@@ -59,14 +60,12 @@ export default function CalendarViewScreen() {
       )}
 
       {/* Content Area with Tabs */}
-      <View className="flex-1">
-        <View
-          className="flex-1 rounded-t-2xl"
-          style={{ backgroundColor: colors.surface.secondary }}
-        >
-          <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-          <TabContent activeTab={activeTab} />
-        </View>
+      <View
+        className="flex-1 rounded-t-2xl"
+        style={{ backgroundColor: colors.surface.secondary }}
+      >
+        <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+        {activeTab === "ai-chat" ? <AiChatTab /> : <EmotionProfileTab />}
       </View>
     </View>
   );
