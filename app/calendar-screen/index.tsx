@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, SafeAreaView } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { format } from "date-fns";
-import DateHeader from "./components/date-header";
-import WeekCalendarComponent from "./components/week-calendar";
-import TabBar from "./components/tab-bar";
-import AiChatTab from "./components/ai-chat-tab";
-import EmotionProfileTab from "./components/emotion-profile-tab";
+import DateHeader from "./calendar-ui/date-header";
+import WeekCalendarComponent from "./calendar-ui/week-calendar";
+import TabBar from "./daily-review/tab-bar";
+import AiChatTab from "./daily-review/tabs/ai-chat/ai-chat-tab";
+import EmotionProfileTab from "./daily-review/tabs/emotion-profile/emotion-profile-tab";
 
 type TabType = "ai-chat" | "emotional-profile";
 

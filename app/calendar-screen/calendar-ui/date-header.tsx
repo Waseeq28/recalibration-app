@@ -25,28 +25,22 @@ export default function DateHeader({
       onPress={onToggleCalendar}
       activeOpacity={0.7}
     >
-      <View className="flex-row items-center justify-between">
-        <View className="flex-1">
-          <Text
-            className="text-center text-base font-medium"
-            style={{ color: colors.text.primary }}
-          >
-            {isCalendarCollapsed
-              ? format(new Date(selectedDate), "EEEE, MMMM d")
-              : currentMonth}
-          </Text>
-        </View>
-        <TouchableOpacity
-          className="p-2 ml-3"
-          onPress={onToggleCalendar}
-          activeOpacity={0.7}
+      <View className="relative flex-row items-center justify-center">
+        <Text
+          className="text-center text-base font-medium"
+          style={{ color: colors.text.primary }}
         >
+          {isCalendarCollapsed
+            ? format(new Date(selectedDate), "EEEE, MMMM d")
+            : currentMonth}
+        </Text>
+        <View className="absolute right-0">
           {isCalendarCollapsed ? (
             <ChevronDownIcon size={20} color={colors.text.primary} />
           ) : (
             <ChevronUpIcon size={20} color={colors.text.primary} />
           )}
-        </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );

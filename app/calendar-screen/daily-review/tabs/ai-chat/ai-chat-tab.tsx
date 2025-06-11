@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import MessageInput from "./ai-chat-components/message-input";
-import MessageListing from "./ai-chat-components/message-listing";
-import { Message } from "./ai-chat-components/message-card";
+import MessageInput from "./components/message-input";
+import MessageListing from "./components/message-listing";
+import { Message } from "./components/message-card";
 
 export default function AiChatTab() {
   const { colors } = useTheme();
