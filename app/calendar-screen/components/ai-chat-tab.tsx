@@ -68,9 +68,12 @@ export default function AiChatTab() {
   };
 
   return (
-    <View className="flex-1" style={{ backgroundColor: colors.background }}>
+    <View
+      className="flex-1"
+      style={{ backgroundColor: colors.background, borderRadius: 16 }}
+    >
       <MessageListing messages={messages} />
-      <View className="p-4">
+      <View className="p-1">
         <MessageInput onSendMessage={handleSendMessage} />
       </View>
     </View>

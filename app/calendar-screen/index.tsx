@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { format } from "date-fns";
 import DateHeader from "./components/date-header";
@@ -42,31 +42,39 @@ export default function CalendarViewScreen() {
   };
 
   return (
-    <View className="flex-1" style={{ backgroundColor: colors.background }}>
-      <DateHeader
-        selectedDate={selectedDate}
-        currentMonth={currentMonth}
-        isCalendarCollapsed={isCalendarCollapsed}
-        onToggleCalendar={toggleCalendar}
-      />
-
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <View>
+        <DateHeader
+          selectedDate={selectedDate}
+          currentMonth={currentMonth}
+          isCalendarCollapsed={isCalendarCollapsed}
+          onToggleCalendar={toggleCalendar}
+        />
+      </View>
       {/* Week Calendar - Conditionally Rendered */}
       {!isCalendarCollapsed && (
-        <WeekCalendarComponent
-          selectedDate={selectedDate}
-          onDayPress={handleDayPress}
-          onVisibleMonthsChange={handleVisibleMonthsChange}
-        />
+        <View>
+          <WeekCalendarComponent
+            selectedDate={selectedDate}
+            onDayPress={handleDayPress}
+            onVisibleMonthsChange={handleVisibleMonthsChange}
+          />
+        </View>
       )}
 
       {/* Content Area with Tabs */}
       <View
-        className="flex-1 rounded-t-2xl"
-        style={{ backgroundColor: colors.surface.secondary }}
+        style={{
+          flex: 1,
+          backgroundColor: colors.surface.secondary,
+          borderWidth: 1,
+          borderColor: colors.border.light,
+          borderRadius: 16,
+        }}
       >
         <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
         {activeTab === "ai-chat" ? <AiChatTab /> : <EmotionProfileTab />}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

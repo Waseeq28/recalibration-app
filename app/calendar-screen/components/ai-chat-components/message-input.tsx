@@ -21,10 +21,7 @@ export default function MessageInput({ onSendMessage }: MessageInputProps) {
   };
 
   return (
-    <View
-      className="rounded-xl"
-      style={{ backgroundColor: colors.border.light }}
-    >
+    <View style={{ borderRadius: 16 }}>
       <LinearGradient
         colors={colors.gradients.card.outer}
         start={{ x: 0.9, y: 0.5 }}
