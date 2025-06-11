@@ -1,7 +1,8 @@
 import React from "react";
 import { View, FlatList, Text } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
-import MessageCard, { Message } from "./message-card";
+import MessageCard from "./message-card";
+import { Message } from "@/lib/db/schemas/message.schema";
 
 type MessageListingProps = {
   messages: Message[];

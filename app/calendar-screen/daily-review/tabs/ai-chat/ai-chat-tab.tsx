@@ -1,70 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageInput from "./components/message-input";
 import MessageListing from "./components/message-listing";
-import { Message } from "./components/message-card";
+import { Message } from "@/lib/db/schemas/message.schema";
+import { useMessageOperations } from "@/lib/db/hooks/useMessageOperations";
+import { format } from "date-fns";
 
 export default function AiChatTab() {
   const { colors } = useTheme();
+  const { addMessage, getMessagesByDate, isLoading } = useMessageOperations();
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  // Hardcoded sample messages for demonstration
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      type: "text" as const,
-      content: "How was your day today?",
-      timestamp: "2:30 PM",
-      isAiGenerated: true,
-    },
-    {
-      id: "2",
-      type: "text" as const,
-      content:
-        "It was pretty good! I had a productive meeting this morning and finished some important tasks.",
-      timestamp: "2:32 PM",
-      isAiGenerated: false,
-    },
-    {
-      id: "3",
-      type: "text" as const,
-      content:
-        "That sounds wonderful! What made the meeting particularly productive? I'd love to help you reflect on what worked well.",
-      timestamp: "2:33 PM",
-      isAiGenerated: true,
-    },
-  ]);
+  // Get today's date for filtering messages
+  const today = format(new Date(), "MMM d, yyyy");
 
-  const handleSendMessage = (content: string, isAiEnabled: boolean) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      type: "text",
-      content,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      isAiGenerated: false,
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!isLoading) {
+        const todayMessages = await getMessagesByDate(today);
+        setMessages(todayMessages);
+      }
     };
 
-    // Add user message
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    fetchMessages();
+  }, [getMessagesByDate, today, isLoading]);
 
-    // Simulate AI response after a short delay
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        type: "text",
-        content: "That's interesting! Tell me more about that.",
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        isAiGenerated: true,
-      };
+  const handleSendMessage = async (content: string, isAiEnabled: boolean) => {
+    // Add user message to database
+    const messageId = await addMessage(content, false);
 
-      setMessages((prevMessages) => [...prevMessages, aiResponse]);
-    }, 1000);
+    if (messageId) {
+      // Refresh messages to show the new one
+      const updatedMessages = await getMessagesByDate(today);
+      setMessages(updatedMessages);
+
+      // Simulate AI response after a short delay
+      if (isAiEnabled) {
+        setTimeout(async () => {
+          const aiResponse = "That's interesting! Tell me more about that.";
+          await addMessage(aiResponse, true);
+
+          // Refresh messages again to show AI response
+          const finalMessages = await getMessagesByDate(today);
+          setMessages(finalMessages);
+        }, 1000);
+      }
+    }
   };
 
   return (

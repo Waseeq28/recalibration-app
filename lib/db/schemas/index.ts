@@ -1,9 +1,9 @@
-import { scribbleSchema } from './scribble.schema'
+import { messageSchema } from "./message.schema";
 
-export * from './scribble.schema'
+export * from "./message.schema";
 
 export const collections = {
-	scribbles: {
-		schema: scribbleSchema,
-	},
-}
+  messages: {
+    schema: messageSchema,
+  },
+};

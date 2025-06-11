@@ -2,14 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
-
-export interface Message {
-  id: string;
-  type: "text";
-  content: string;
-  timestamp: string;
-  isAiGenerated: boolean;
-}
+import { Message } from "@/lib/db/schemas/message.schema";
 
 interface MessageCardProps extends Message {}
 
