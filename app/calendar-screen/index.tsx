@@ -5,8 +5,8 @@ import { format } from "date-fns";
 import DateHeader from "./calendar-ui/date-header";
 import WeekCalendarComponent from "./calendar-ui/week-calendar";
 import TabBar from "./daily-review/tab-bar";
-import AiChatTab from "./daily-review/tabs/ai-chat/ai-chat-tab";
-import EmotionProfileTab from "./daily-review/tabs/emotion-profile/emotion-profile-tab";
+import AiChatTab from "./daily-review/ai-chat/ai-chat-tab";
+import EmotionProfileTab from "./daily-review/emotion-profile/emotion-profile-tab";
 
 type TabType = "ai-chat" | "emotional-profile";
 
