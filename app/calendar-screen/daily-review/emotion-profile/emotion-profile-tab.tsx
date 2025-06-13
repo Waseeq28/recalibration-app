@@ -3,7 +3,13 @@ import { View, Text } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { HeartIcon } from "lucide-react-native";
 
-export default function EmotionProfileTab() {
+interface EmotionProfileTabProps {
+  selectedDate: string;
+}
+
+export default function EmotionProfileTab({
+  selectedDate,
+}: EmotionProfileTabProps) {
   const { colors } = useTheme();
 
   return (

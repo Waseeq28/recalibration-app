@@ -19,12 +19,13 @@ export function useMessageOperations() {
     async (
       content: string,
       isAiGenerated: boolean = false,
-      type: MessageType = "text"
+      type: MessageType = "text",
+      customDate?: string // Optional parameter for selected date
     ) => {
       if (!db || isDbLoading) return null;
 
       const now = new Date();
-      const date = formatDate(now);
+      const date = customDate || formatDate(now); // Use custom date if provided
       const timestamp = formatTimestamp(now);
       const createdAt = now.getTime();
 

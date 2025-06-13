@@ -73,7 +73,11 @@ export default function CalendarViewScreen() {
         }}
       >
         <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-        {activeTab === "ai-chat" ? <AiChatTab /> : <EmotionProfileTab />}
+        {activeTab === "ai-chat" ? (
+          <AiChatTab selectedDate={selectedDate} />
+        ) : (
+          <EmotionProfileTab selectedDate={selectedDate} />
+        )}
       </View>
     </SafeAreaView>
   );

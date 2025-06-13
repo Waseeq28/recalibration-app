@@ -7,42 +7,46 @@ import { Message } from "@/lib/db/schemas/message.schema";
 import { useMessageOperations } from "@/lib/db/hooks/useMessageOperations";
 import { format } from "date-fns";
 
-export default function AiChatTab() {
+interface AiChatTabProps {
+  selectedDate: string;
+}
+
+export default function AiChatTab({ selectedDate }: AiChatTabProps) {
   const { colors } = useTheme();
   const { addMessage, getMessagesByDate, isLoading } = useMessageOperations();
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // Get today's date for filtering messages
-  const today = format(new Date(), "MMM d, yyyy");
+  // Convert selectedDate (YYYY-MM-DD) to the format used in database (MMM d, yyyy)
+  const formattedDate = format(new Date(selectedDate), "MMM d, yyyy");
 
   useEffect(() => {
     const fetchMessages = async () => {
       if (!isLoading) {
-        const todayMessages = await getMessagesByDate(today);
-        setMessages(todayMessages);
+        const dateMessages = await getMessagesByDate(formattedDate);
+        setMessages(dateMessages);
       }
     };
 
     fetchMessages();
-  }, [getMessagesByDate, today, isLoading]);
+  }, [getMessagesByDate, formattedDate, isLoading]);
 
   const handleSendMessage = async (content: string, isAiEnabled: boolean) => {
-    // Add user message to database
-    const messageId = await addMessage(content, false);
+    // Add user message to database with selected date
+    const messageId = await addMessage(content, false, "text", formattedDate);
 
     if (messageId) {
       // Refresh messages to show the new one
-      const updatedMessages = await getMessagesByDate(today);
+      const updatedMessages = await getMessagesByDate(formattedDate);
       setMessages(updatedMessages);
 
       // Simulate AI response after a short delay
       if (isAiEnabled) {
         setTimeout(async () => {
           const aiResponse = "That's interesting! Tell me more about that.";
-          await addMessage(aiResponse, true);
+          await addMessage(aiResponse, true, "text", formattedDate);
 
           // Refresh messages again to show AI response
-          const finalMessages = await getMessagesByDate(today);
+          const finalMessages = await getMessagesByDate(formattedDate);
           setMessages(finalMessages);
         }, 1000);
       }
