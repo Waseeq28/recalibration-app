@@ -3,7 +3,11 @@ import { createRxDatabase, addRxPlugin } from "rxdb";
 import { RxDBQueryBuilderPlugin } from "rxdb/plugins/query-builder";
 import { RxDBUpdatePlugin } from "rxdb/plugins/update";
 import { wrappedValidateAjvStorage } from "rxdb/plugins/validate-ajv";
-import { getRxStorageMemory } from "rxdb/plugins/storage-memory";
+import {
+  getRxStorageSQLiteTrial,
+  getSQLiteBasicsExpoSQLiteAsync,
+} from "rxdb/plugins/storage-sqlite";
+import * as SQLite from "expo-sqlite";
 import CryptoJS from "crypto-js";
 import { collections } from "./schemas";
 
@@ -19,7 +23,9 @@ export const initializeRxDb = async () => {
   const db = await createRxDatabase({
     name: "recalibration-app",
     storage: wrappedValidateAjvStorage({
-      storage: getRxStorageMemory(),
+      storage: getRxStorageSQLiteTrial({
+        sqliteBasics: getSQLiteBasicsExpoSQLiteAsync(SQLite.openDatabaseAsync),
+      }),
     }),
     multiInstance: false,
     hashFunction: customHashFunction,
