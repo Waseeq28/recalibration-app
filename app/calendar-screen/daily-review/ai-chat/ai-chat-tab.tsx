@@ -6,6 +6,7 @@ import MessageListing from "./components/message-listing";
 import { Message } from "@/lib/db/schemas/message.schema";
 import { useMessageOperations } from "@/lib/db/hooks/useMessageOperations";
 import { format } from "date-fns";
+import { openAIService } from "@/lib/services/openai.service";
 
 interface AiChatTabProps {
   selectedDate: string;
@@ -15,6 +16,7 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
   const { colors } = useTheme();
   const { addMessage, getMessagesByDate, isLoading } = useMessageOperations();
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isAiThinking, setIsAiThinking] = useState(false);
 
   // Convert selectedDate (YYYY-MM-DD) to the format used in database (MMM d, yyyy)
   const formattedDate = format(new Date(selectedDate), "MMM d, yyyy");
@@ -39,16 +41,49 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
       const updatedMessages = await getMessagesByDate(formattedDate);
       setMessages(updatedMessages);
 
-      // Simulate AI response after a short delay
+      // Get real AI response using OpenAI
       if (isAiEnabled) {
-        setTimeout(async () => {
-          const aiResponse = "That's interesting! Tell me more about that.";
+        try {
+          // Show loading state
+          setIsAiThinking(true);
+
+          // Create a system prompt to give the AI context and personality
+          const systemPrompt = `You are a helpful personal assistant for a daily reflection app. 
+          The user is reflecting on their day (${formattedDate}). 
+          Be supportive, encouraging, and help them process their thoughts and experiences. 
+          Ask thoughtful follow-up questions when appropriate.
+          Keep responses concise but meaningful (1-3 sentences).`;
+
+          // Call our OpenAI service to get a real AI response
+          const aiResponse = await openAIService.getAIResponse(
+            content,
+            systemPrompt
+          );
+
+          // Save AI response to database
           await addMessage(aiResponse, true, "text", formattedDate);
 
-          // Refresh messages again to show AI response
+          // Refresh messages to show AI response
           const finalMessages = await getMessagesByDate(formattedDate);
           setMessages(finalMessages);
-        }, 1000);
+        } catch (error) {
+          console.error("❌ Error getting AI response:", error);
+
+          // Show user-friendly error message
+          const errorMessage =
+            error instanceof Error
+              ? `Sorry, I'm having trouble right now: ${error.message}`
+              : "I'm sorry, I'm having trouble connecting right now. Please try again later.";
+
+          await addMessage(errorMessage, true, "text", formattedDate);
+
+          // Refresh messages to show error message
+          const finalMessages = await getMessagesByDate(formattedDate);
+          setMessages(finalMessages);
+        } finally {
+          // Hide loading state in both success and error cases
+          setIsAiThinking(false);
+        }
       }
     }
   };
@@ -60,7 +95,10 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
     >
       <MessageListing messages={messages} />
       <View className="p-1">
-        <MessageInput onSendMessage={handleSendMessage} />
+        <MessageInput
+          onSendMessage={handleSendMessage}
+          isAiThinking={isAiThinking}
+        />
       </View>
     </View>
   );

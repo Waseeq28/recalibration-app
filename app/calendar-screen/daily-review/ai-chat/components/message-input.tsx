@@ -6,16 +6,20 @@ import { ArrowRightIcon } from "lucide-react-native";
 
 type MessageInputProps = {
   onSendMessage: (content: string, isAiEnabled: boolean) => void;
+  isAiThinking?: boolean;
 };
 
-export default function MessageInput({ onSendMessage }: MessageInputProps) {
+export default function MessageInput({
+  onSendMessage,
+  isAiThinking = false,
+}: MessageInputProps) {
   const { colors } = useTheme();
   const [text, setText] = useState("");
 
   const handleSend = () => {
     const trimmedText = text.trim();
     if (trimmedText) {
-      onSendMessage(trimmedText, false);
+      onSendMessage(trimmedText, true);
       setText("");
     }
   };
@@ -42,8 +46,13 @@ export default function MessageInput({ onSendMessage }: MessageInputProps) {
               numberOfLines={3}
               onChangeText={setText}
               value={text}
-              placeholder="Ask me anything about your day..."
+              placeholder={
+                isAiThinking
+                  ? "AI is thinking..."
+                  : "Ask me anything about your day..."
+              }
               placeholderTextColor={colors.text.tertiary}
+              editable={!isAiThinking}
               textAlignVertical="top"
             />
             {text.trim() && (
