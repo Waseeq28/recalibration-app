@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "../client";
 import { nanoid } from "nanoid";
 import { format } from "date-fns";
 
-// Types (same as your RxDB schema)
+// Message types
 export type MessageType = "text";
 
 export interface Message {
