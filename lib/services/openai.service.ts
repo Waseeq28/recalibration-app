@@ -1,4 +1,4 @@
-// OpenAI Service - Handles all AI API communication
+// OpenAI Service - Handles all AI API communication via Supabase Edge Functions
 
 // Types for OpenAI API responses
 export interface ChatMessage {
@@ -24,20 +24,21 @@ export interface OpenAIResponse {
 }
 
 export class OpenAIService {
-  private apiKey: string;
-  private baseURL = "https://api.openai.com/v1";
+  private supabaseUrl: string;
+  private supabaseAnonKey: string;
 
   constructor() {
-    // Get API key from environment variables
-    this.apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY || "";
+    // Get Supabase credentials from environment variables
+    this.supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || "";
+    this.supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
 
-    if (!this.apiKey || this.apiKey === "your-api-key-here") {
-      console.warn("OpenAI API key not configured properly");
+    if (!this.supabaseUrl || !this.supabaseAnonKey) {
+      console.warn("Supabase credentials not configured properly");
     }
   }
 
   /**
-   * Send a message to OpenAI and get a response
+   * Send a message to OpenAI via Supabase Edge Function
    */
   async sendMessage(
     messages: ChatMessage[],
@@ -47,72 +48,64 @@ export class OpenAIService {
       temperature?: number;
     } = {}
   ): Promise<string> {
-    const {
-      model = "gpt-3.5-turbo",
-      maxTokens = 150,
-      temperature = 0.7,
-    } = options;
+    // Check if Supabase credentials are available
+    if (!this.supabaseUrl || !this.supabaseAnonKey) {
+      throw new Error("Please add your Supabase credentials to the .env file");
+    }
 
-    // Check if API key is available
-    if (!this.apiKey || this.apiKey === "your-api-key-here") {
-      throw new Error("Please add your OpenAI API key to the .env file");
+    // Convert the messages array to a simple query string for the basic Edge Function
+    const query = messages
+      .filter(msg => msg.role === "user")
+      .map(msg => msg.content)
+      .join(" ");
+
+    if (!query.trim()) {
+      throw new Error("No user message found in the conversation");
     }
 
     try {
-      // Make the HTTP request to OpenAI
-      const response = await fetch(`${this.baseURL}/chat/completions`, {
+      // Make the HTTP request to Supabase Edge Function
+      const response = await fetch(`${this.supabaseUrl}/functions/v1/openai`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.apiKey}`,
+          "Authorization": `Bearer ${this.supabaseAnonKey}`,
         },
         body: JSON.stringify({
-          model,
-          messages,
-          max_tokens: maxTokens,
-          temperature,
+          query: query,
         }),
       });
 
       // Check if the request was successful
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("OpenAI API Error:", errorData);
+        const errorText = await response.text();
+        console.error("Supabase Edge Function Error:", errorText);
 
         // Handle specific error types
         if (response.status === 401) {
-          throw new Error("Invalid API key. Please check your OpenAI API key.");
+          throw new Error("Invalid Supabase credentials. Please check your keys.");
         } else if (response.status === 429) {
           throw new Error("Rate limit exceeded. Please try again later.");
-        } else if (
-          response.status === 400 &&
-          errorData.error?.code === "insufficient_quota"
-        ) {
-          throw new Error("OpenAI quota exceeded. Please check your billing.");
         } else {
           throw new Error(
-            `OpenAI API error: ${errorData.error?.message || "Unknown error"}`
+            `Edge Function error: ${errorText || "Unknown error"}`
           );
         }
       }
 
-      // Parse the successful response
-      const data: OpenAIResponse = await response.json();
+      // The Edge Function returns plain text, not JSON
+      const aiResponse = await response.text();
 
-      // Return the AI's message
-      return (
-        data.choices[0]?.message?.content ||
-        "I apologize, but I could not generate a response."
-      );
+      return aiResponse || "I apologize, but I could not generate a response.";
     } catch (error) {
-      console.error("Error calling OpenAI:", error);
+      console.error("Error calling Edge Function:", error);
 
       // Re-throw the error so the UI can handle it
       if (error instanceof Error) {
         throw error;
       } else {
         throw new Error(
-          "Failed to connect to OpenAI. Please check your internet connection."
+          "Failed to connect to AI service. Please check your internet connection."
         );
       }
     }
