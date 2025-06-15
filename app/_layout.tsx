@@ -1,18 +1,16 @@
+import "react-native-get-random-values";
 import { Stack } from "expo-router";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { PortalHost } from "@rn-primitives/portal";
-import { RxDbProvider } from "@/lib/db/RxDbProvider";
 
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <RxDbProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(home)" />
-          <Stack.Screen name="calendar-screen" />
-        </Stack>
-        <PortalHost />
-      </RxDbProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(home)" />
+        <Stack.Screen name="calendar-screen" />
+      </Stack>
+      <PortalHost />
     </ThemeProvider>
   );
 }

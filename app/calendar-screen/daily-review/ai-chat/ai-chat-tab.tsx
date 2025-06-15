@@ -3,8 +3,7 @@ import { View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageInput from "./components/message-input";
 import MessageListing from "./components/message-listing";
-import { Message } from "@/lib/db/schemas/message.schema";
-import { useMessageOperations } from "@/lib/db/hooks/useMessageOperations";
+import { Message, useSupabaseMessages } from "@/lib/hooks/useSupabaseMessages";
 import { format } from "date-fns";
 import { openAIService } from "@/lib/services/openai.service";
 
@@ -14,7 +13,7 @@ interface AiChatTabProps {
 
 export default function AiChatTab({ selectedDate }: AiChatTabProps) {
   const { colors } = useTheme();
-  const { addMessage, getMessagesByDate, isLoading } = useMessageOperations();
+  const { addMessage, getMessagesByDate, isLoading } = useSupabaseMessages();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isAiThinking, setIsAiThinking] = useState(false);
 
