@@ -10,10 +10,10 @@ export interface Message {
   id: string;
   type: MessageType;
   content: string;
-  timestamp: string;
-  date: string;
+  timestamp: string; // ISO timestamp string from database
+  date: string; // ISO date string from database
   isAiGenerated: boolean;
-  createdAt: number;
+  createdAt: string; // ISO timestamp string from database
 }
 
 const formatTimestamp = (date: Date): string => {
@@ -32,24 +32,23 @@ export function useSupabaseMessages() {
       content: string,
       isAiGenerated: boolean = false,
       type: MessageType = "text",
-      customDate?: string
+      customDate?: Date
     ): Promise<string | null> => {
       try {
         setIsLoading(true);
 
         const now = new Date();
-        const date = customDate || formatDate(now);
-        const timestamp = formatTimestamp(now);
-        const createdAt = now.getTime();
+        // Ensure we have a valid Date object
+        const messageDate = (customDate && customDate instanceof Date) ? customDate : now;
 
-        const newMessage: Message = {
+        const newMessage = {
           id: nanoid(),
           type,
           content,
-          timestamp,
-          date,
+          timestamp: now.toISOString(), // Store as ISO timestamp
+          date: messageDate.toISOString().split('T')[0], // Store as YYYY-MM-DD
           isAiGenerated,
-          createdAt,
+          createdAt: now.toISOString(), // Store as ISO timestamp
         };
 
         const { error } = await supabase.from("messages").insert(newMessage);
@@ -96,6 +95,7 @@ export function useSupabaseMessages() {
   const getMessagesByDate = useCallback(
     async (date: string): Promise<Message[]> => {
       try {
+        // Expect date in YYYY-MM-DD format
         const { data, error } = await supabase
           .from("messages")
           .select("*")
@@ -151,6 +151,15 @@ export function useSupabaseMessages() {
     }
   }, []);
 
+  // Helper functions to format database timestamps/dates for display
+  const formatMessageTimestamp = useCallback((timestamp: string): string => {
+    return formatTimestamp(new Date(timestamp));
+  }, []);
+
+  const formatMessageDate = useCallback((date: string): string => {
+    return formatDate(new Date(date));
+  }, []);
+
   return {
     isLoading,
     addMessage,
@@ -158,5 +167,7 @@ export function useSupabaseMessages() {
     getMessagesByDate,
     getAllMessages,
     deleteMessage,
+    formatMessageTimestamp,
+    formatMessageDate,
   };
 }
