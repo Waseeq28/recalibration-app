@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, SafeAreaView } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { format } from "date-fns";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import DateHeader from "./calendar-ui/date-header";
 import WeekCalendarComponent from "./calendar-ui/week-calendar";
 import TabBar from "./daily-review/tab-bar";
@@ -42,43 +43,45 @@ export default function CalendarViewScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <View>
-        <DateHeader
-          selectedDate={selectedDate}
-          currentMonth={currentMonth}
-          isCalendarCollapsed={isCalendarCollapsed}
-          onToggleCalendar={toggleCalendar}
-        />
-      </View>
-      {/* Week Calendar - Conditionally Rendered */}
-      {!isCalendarCollapsed && (
+    <ProtectedRoute>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         <View>
-          <WeekCalendarComponent
+          <DateHeader
             selectedDate={selectedDate}
-            onDayPress={handleDayPress}
-            onVisibleMonthsChange={handleVisibleMonthsChange}
+            currentMonth={currentMonth}
+            isCalendarCollapsed={isCalendarCollapsed}
+            onToggleCalendar={toggleCalendar}
           />
         </View>
-      )}
-
-      {/* Content Area with Tabs */}
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.surface.secondary,
-          borderWidth: 1,
-          borderColor: colors.border.light,
-          borderRadius: 16,
-        }}
-      >
-        <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-        {activeTab === "ai-chat" ? (
-          <AiChatTab selectedDate={selectedDate} />
-        ) : (
-          <EmotionProfileTab selectedDate={selectedDate} />
+        {/* Week Calendar - Conditionally Rendered */}
+        {!isCalendarCollapsed && (
+          <View>
+            <WeekCalendarComponent
+              selectedDate={selectedDate}
+              onDayPress={handleDayPress}
+              onVisibleMonthsChange={handleVisibleMonthsChange}
+            />
+          </View>
         )}
-      </View>
-    </SafeAreaView>
+
+        {/* Content Area with Tabs */}
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.surface.secondary,
+            borderWidth: 1,
+            borderColor: colors.border.light,
+            borderRadius: 16,
+          }}
+        >
+          <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+          {activeTab === "ai-chat" ? (
+            <AiChatTab selectedDate={selectedDate} />
+          ) : (
+            <EmotionProfileTab selectedDate={selectedDate} />
+          )}
+        </View>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 }
