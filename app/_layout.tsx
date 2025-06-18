@@ -1,7 +1,7 @@
 import "react-native-get-random-values";
 import { Stack } from "expo-router";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider } from "@/lib/auth/context/AuthContext";
 import { PortalHost } from "@rn-primitives/portal";
 
 export default function RootLayout() {

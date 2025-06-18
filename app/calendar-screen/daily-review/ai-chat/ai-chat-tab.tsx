@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageInput from "./components/message-input";
 import MessageListing from "./components/message-listing";
-import { Message, useSupabaseMessages } from "@/lib/supabase/hooks/useMessages";
+import { Message, useSupabaseMessages } from "@/lib/database/hooks/useMessages";
 import { format } from "date-fns";
 import { openAIService } from "@/lib/services/openai.service";
 

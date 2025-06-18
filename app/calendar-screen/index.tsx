@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, SafeAreaView } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { format } from "date-fns";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { ProtectedRoute } from "@/lib/auth/components/ProtectedRoute";
 import DateHeader from "./calendar-ui/date-header";
 import WeekCalendarComponent from "./calendar-ui/week-calendar";
 import TabBar from "./daily-review/tab-bar";

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Linking } from 'react-native';
-import { supabase } from '@/lib/supabase/client';
+import { supabase } from '@/lib/database/client';
 
 export const useGoogleAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
