@@ -5,7 +5,7 @@ import MessageInput from "./components/message-input";
 import MessageListing from "./components/message-listing";
 import { Message, useSupabaseMessages } from "@/lib/database/hooks/useMessages";
 import { format } from "date-fns";
-import { openAIService } from "@/lib/services/openai.service";
+import { openAIService } from "@/lib/openai/openai.service";
 
 interface AiChatTabProps {
   selectedDate: string;
