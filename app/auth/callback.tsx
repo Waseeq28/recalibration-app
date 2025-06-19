@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "@/lib/supabase/client";
+import { supabase } from "@/lib/database/client";
 import { useTheme } from "@/contexts/ThemeContext";
 
 export default function AuthCallback() {
