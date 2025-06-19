@@ -17,27 +17,27 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isAiThinking, setIsAiThinking] = useState(false);
 
-  // Convert selectedDate (YYYY-MM-DD) to the format used in database (MMM d, yyyy)
-  const formattedDate = format(new Date(selectedDate), "MMM d, yyyy");
+  // selectedDate is already in YYYY-MM-DD format, which matches what the database expects
+  const messageDate = new Date(selectedDate);
 
   useEffect(() => {
     const fetchMessages = async () => {
       if (!isLoading) {
-        const dateMessages = await getMessagesByDate(formattedDate);
+        const dateMessages = await getMessagesByDate(selectedDate);
         setMessages(dateMessages);
       }
     };
 
     fetchMessages();
-  }, [getMessagesByDate, formattedDate, isLoading]);
+  }, [getMessagesByDate, selectedDate, isLoading]);
 
   const handleSendMessage = async (content: string, isAiEnabled: boolean) => {
     // Add user message to database with selected date
-    const messageId = await addMessage(content, false, "text", formattedDate);
+    const messageId = await addMessage(content, false, "text", messageDate);
 
     if (messageId) {
       // Refresh messages to show the new one
-      const updatedMessages = await getMessagesByDate(formattedDate);
+      const updatedMessages = await getMessagesByDate(selectedDate);
       setMessages(updatedMessages);
 
       // Get real AI response using OpenAI
@@ -48,7 +48,7 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
 
           // Create a system prompt to give the AI context and personality
           const systemPrompt = `You are a helpful personal assistant for a daily reflection app. 
-          The user is reflecting on their day (${formattedDate}). 
+          The user is reflecting on their day (${selectedDate}). 
           Be supportive, encouraging, and help them process their thoughts and experiences. 
           Ask thoughtful follow-up questions when appropriate.
           Keep responses concise but meaningful (1-3 sentences).`;
@@ -60,10 +60,10 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
           );
 
           // Save AI response to database
-          await addMessage(aiResponse, true, "text", formattedDate);
+          await addMessage(aiResponse, true, "text", messageDate);
 
           // Refresh messages to show AI response
-          const finalMessages = await getMessagesByDate(formattedDate);
+          const finalMessages = await getMessagesByDate(selectedDate);
           setMessages(finalMessages);
         } catch (error) {
           console.error("❌ Error getting AI response:", error);
@@ -74,10 +74,10 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
               ? `Sorry, I'm having trouble right now: ${error.message}`
               : "I'm sorry, I'm having trouble connecting right now. Please try again later.";
 
-          await addMessage(errorMessage, true, "text", formattedDate);
+          await addMessage(errorMessage, true, "text", messageDate);
 
           // Refresh messages to show error message
-          const finalMessages = await getMessagesByDate(formattedDate);
+          const finalMessages = await getMessagesByDate(selectedDate);
           setMessages(finalMessages);
         } finally {
           // Hide loading state in both success and error cases
