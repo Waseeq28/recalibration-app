@@ -2,13 +2,15 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
-import { Message } from "@/lib/db/schemas/message.schema";
+import { Message } from "ai/react";
 
 interface MessageCardProps extends Message {}
 
 export default function MessageCard(props: MessageCardProps) {
   const { colors } = useTheme();
-  const { timestamp, isAiGenerated, content } = props;
+  const { role, content, createdAt } = props;
+
+  const isAiGenerated = role === "assistant";
 
   const containerAlignment = isAiGenerated ? "flex-start" : "flex-end";
   const outerGradient = isAiGenerated
@@ -44,9 +46,11 @@ export default function MessageCard(props: MessageCardProps) {
             >
               {content}
             </Text>
-            {/* <Text style={{ color: colors.text.tertiary }} className="text-xs">
-              {timestamp}
-            </Text> */}
+            {createdAt && (
+              <Text style={{ color: colors.text.tertiary }} className="text-xs">
+                {new Date(createdAt).toLocaleTimeString()}
+              </Text>
+            )}
           </LinearGradient>
         </LinearGradient>
       </View>
