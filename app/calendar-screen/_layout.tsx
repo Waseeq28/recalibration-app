@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View, TouchableOpacity, Text } from "react-native";
 import { ArrowLeftIcon, BellIcon, CalendarIcon } from "lucide-react-native";
 import { useRouter } from "expo-router";
@@ -57,15 +56,13 @@ export default function CalendarScreenLayout() {
   };
 
   return (
-    <SafeAreaProvider>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-    </SafeAreaProvider>
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack>
   );
 }
