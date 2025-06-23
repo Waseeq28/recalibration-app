@@ -29,34 +29,9 @@ export default function AuthSection() {
     );
   }
 
+  // If user is authenticated, don't show anything (they will be redirected)
   if (user) {
-    const displayName =
-      user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
-    return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <View style={styles.content}>
-          <View style={styles.welcomeContainer}>
-            <Text style={[styles.welcomeTitle, { color: colors.text.primary }]}>
-              Welcome {displayName}!
-            </Text>
-            <Text style={[styles.emailText, { color: colors.text.secondary }]}>
-              Email: {user.email}
-            </Text>
-          </View>
-          <View style={styles.buttonOuterContainer}>
-            <TouchableOpacity
-              onPress={signOut}
-              style={[
-                styles.button,
-                { backgroundColor: colors.text.destructive },
-              ]}
-            >
-              <Text style={styles.signOutButtonText}>Sign Out</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
+    return null;
   }
 
   return (
@@ -83,28 +58,6 @@ export default function AuthSection() {
           Connect With Your Emotions
         </Text>
       </View>
-
-      {/* Middle Container */}
-      {/* <View style={styles.middleContainer}>
-        <View
-          style={[
-            styles.cardBg,
-            {
-              backgroundColor: colors.surface.primary,
-              borderColor: colors.border.light,
-            },
-          ]}
-        >
-          <Text style={[styles.cardTitle, { color: colors.text.primary }]}>
-            Based on The Self-Recalibration Framework
-          </Text>
-          <Text style={[styles.cardDesc, { color: colors.text.secondary }]}>
-            Rewire your thoughts and unlock your potential.
-          </Text>
-        </View>
-      </View> */}
-
-      {/* Bottom Container */}
       <View style={styles.bottomContainer}>
         <TouchableOpacity
           style={[
@@ -271,43 +224,5 @@ const styles = StyleSheet.create({
   },
   link: {
     textDecorationLine: "underline",
-  },
-  // Signed-in view styles (unchanged)
-  content: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  welcomeContainer: {
-    alignItems: "center",
-  },
-  welcomeTitle: {
-    fontSize: 34,
-    fontWeight: "bold",
-    marginBottom: 16,
-    textAlign: "center",
-  },
-  emailText: {
-    fontSize: 18,
-    marginBottom: 32,
-  },
-  buttonOuterContainer: {
-    width: "100%",
-    maxWidth: 340,
-  },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-  },
-  signOutButtonText: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: 18,
   },
 });
