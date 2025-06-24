@@ -23,34 +23,34 @@ export default function DateHeader({
   const { colors } = useTheme();
 
   return (
-    <View className="px-4 pt-3 pb-3 flex-row items-center justify-between">
-      {!isCalendarCollapsed && <Profile onPress={onProfilePress} />}
+    <View className="px-4 py-3 flex-row items-center justify-between">
+      {/* Left: Profile */}
+      <View>
+        {!isCalendarCollapsed && <Profile onPress={onProfilePress} />}
+      </View>
 
-      <TouchableOpacity
-        onPress={onToggleCalendar}
-        activeOpacity={0.7}
-        className="flex-1"
-      >
-        <View className="relative flex-row items-center justify-center">
-          <Text
-            className="text-center text-base font-medium"
-            style={{ color: colors.text.primary }}
-          >
-            {isCalendarCollapsed
-              ? format(new Date(selectedDate), "EEEE, MMMM d")
-              : currentMonth}
-          </Text>
-          <View className="absolute right-0">
-            {isCalendarCollapsed ? (
-              <ChevronDownIcon size={20} color={colors.text.primary} />
-            ) : (
-              <ChevronUpIcon size={20} color={colors.text.primary} />
-            )}
-          </View>
-        </View>
+      {/* Center: Date */}
+      <TouchableOpacity onPress={onToggleCalendar}>
+        <Text
+          className="text-center text-base font-medium px-20"
+          style={{ color: colors.text.primary }}
+        >
+          {isCalendarCollapsed
+            ? format(new Date(selectedDate), "EEEE, MMMM d")
+            : currentMonth}
+        </Text>
       </TouchableOpacity>
 
-      <View className="w-8" />
+      {/* Right: Chevron */}
+      <View>
+        <TouchableOpacity onPress={onToggleCalendar} className="p-2">
+          {isCalendarCollapsed ? (
+            <ChevronDownIcon size={20} color={colors.text.primary} />
+          ) : (
+            <ChevronUpIcon size={20} color={colors.text.primary} />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
