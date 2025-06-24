@@ -9,34 +9,28 @@ export function cn(...inputs: ClassValue[]) {
 export const generateAPIUrl = (relativePath: string) => {
 	const path = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
 
-	// 1. Use explicit environment variable if it exists (works in dev & prod)
-	if (process.env.EXPO_PUBLIC_API_BASE_URL) {
-	  return process.env.EXPO_PUBLIC_API_BASE_URL.concat(path);
+	if (process.env.NODE_ENV === 'development') {
+		// SDK 52+ uses hostUri in expoConfig
+		if ((Constants as any)?.expoConfig?.hostUri) {
+			const origin = `http://${(Constants as any).expoConfig.hostUri}`;
+			return origin.concat(path);
+		}
+
+		// Fallback to environment variable
+		if (process.env.EXPO_PUBLIC_API_BASE_URL) {
+			return process.env.EXPO_PUBLIC_API_BASE_URL.concat(path);
+		}
+
+		throw new Error(
+			'Unable to determine development server URL. Please set EXPO_PUBLIC_API_BASE_URL in your .env.local file.'
+		);
 	}
 
-	// 2. Attempt to derive origin from Expo dev server information
-	let origin: string | undefined;
-
-	if (Constants.experienceUrl) {
-	  // Typical value: exp://192.168.1.100:8081
-	  origin = Constants.experienceUrl.replace('exp://', 'http://');
+	if (!process.env.EXPO_PUBLIC_API_BASE_URL) {
+		throw new Error(
+			'EXPO_PUBLIC_API_BASE_URL environment variable is not defined',
+		);
 	}
 
-	// SDK 49+ exposes hostUri inside expoConfig
-	if (!origin && (Constants as any)?.expoConfig?.hostUri) {
-	  origin = `http://${(Constants as any).expoConfig.hostUri}`;
-	}
-
-	// As a last-resort, attempt to use debuggerHost from classic manifest
-	if (!origin && (Constants as any)?.manifest?.debuggerHost) {
-	  origin = `http://${(Constants as any).manifest.debuggerHost.split(':').shift()}:8081`;
-	}
-
-	if (!origin) {
-	  throw new Error(
-	    'Unable to determine API base URL. Set EXPO_PUBLIC_API_BASE_URL environment variable.',
-	  );
-	}
-
-	return origin.concat(path);
+	return process.env.EXPO_PUBLIC_API_BASE_URL.concat(path);
 };
