@@ -30,7 +30,6 @@ export default function Profile({ onPress }: ProfileProps) {
 
   const displayName =
     user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
-
   // Extract first name from full name
   const firstName = displayName.split(" ")[0];
   const userEmail = user?.email || "";
