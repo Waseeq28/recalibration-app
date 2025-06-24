@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { Linking } from "react-native";
+import { router } from "expo-router";
 import { supabase } from "@/lib/database/client";
 
 interface AuthContextType {
@@ -87,6 +88,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
+      // Immediately redirect to auth screen after sign out
+      router.replace("/(home)");
     } catch (error) {
       // Handle error silently
     }

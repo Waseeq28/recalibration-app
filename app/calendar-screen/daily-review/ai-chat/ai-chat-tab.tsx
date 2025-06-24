@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { View, TextInput, ScrollView, Text, SafeAreaView } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import MessageInput from "./components/message-input";
 import MessageListing from "./components/message-listing";
-import { Message, useSupabaseMessages } from "@/lib/database/hooks/useMessages";
-import { format } from "date-fns";
-import { openAIService } from "@/lib/openai/openai.service";
+import {
+  Message as DbMessage,
+  useSupabaseMessages,
+} from "@/lib/database/hooks/useMessages";
+import { useChat, Message } from "@ai-sdk/react";
+import { fetch as expoFetch } from "expo/fetch";
+import { generateAPIUrl } from "@/lib/utils";
 
 interface AiChatTabProps {
   selectedDate: string;
@@ -14,75 +18,75 @@ interface AiChatTabProps {
 export default function AiChatTab({ selectedDate }: AiChatTabProps) {
   const { colors } = useTheme();
   const { addMessage, getMessagesByDate, isLoading } = useSupabaseMessages();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isAiThinking, setIsAiThinking] = useState(false);
+  const [dbMessages, setDbMessages] = useState<DbMessage[]>([]);
 
-  // Convert selectedDate (YYYY-MM-DD) to the format used in database (MMM d, yyyy)
-  const formattedDate = format(new Date(selectedDate), "MMM d, yyyy");
+  const messageDate = new Date(selectedDate);
+
+  const initialMessages = useMemo(() => {
+    return dbMessages.map(
+      (msg) =>
+        ({
+          id: msg.id,
+          content: msg.content,
+          role: msg.isAiGenerated ? "assistant" : "user",
+          createdAt: new Date(msg.createdAt),
+        } as Message)
+    );
+  }, [dbMessages]);
+
+  const {
+    messages,
+    append,
+    isLoading: isAiThinking,
+    setMessages: setAiMessages,
+  } = useChat({
+    fetch: expoFetch as unknown as typeof globalThis.fetch,
+    api: generateAPIUrl("/api/chat"),
+    initialMessages: initialMessages,
+    onFinish: async (message) => {
+      await addMessage(message.content, true, "text", messageDate);
+      const finalMessages = await getMessagesByDate(selectedDate);
+      setDbMessages(finalMessages);
+    },
+    onError: async (error: Error) => {
+      console.error("❌ Error from AI service:", error);
+      const errorMessage = `Sorry, I'm having trouble right now: ${error.message}`;
+      await addMessage(errorMessage, true, "text", messageDate);
+      const finalMessages = await getMessagesByDate(selectedDate);
+      setDbMessages(finalMessages);
+    },
+  });
+
+  useEffect(() => {
+    setAiMessages(initialMessages);
+  }, [initialMessages, setAiMessages]);
 
   useEffect(() => {
     const fetchMessages = async () => {
       if (!isLoading) {
-        const dateMessages = await getMessagesByDate(formattedDate);
-        setMessages(dateMessages);
+        const dateMessages = await getMessagesByDate(selectedDate);
+        setDbMessages(dateMessages);
       }
     };
-
     fetchMessages();
-  }, [getMessagesByDate, formattedDate, isLoading]);
+  }, [getMessagesByDate, selectedDate, isLoading]);
 
   const handleSendMessage = async (content: string, isAiEnabled: boolean) => {
-    // Add user message to database with selected date
-    const messageId = await addMessage(content, false, "text", formattedDate);
-
-    if (messageId) {
-      // Refresh messages to show the new one
-      const updatedMessages = await getMessagesByDate(formattedDate);
-      setMessages(updatedMessages);
-
-      // Get real AI response using OpenAI
+    const newDbMessageId = await addMessage(
+      content,
+      false,
+      "text",
+      messageDate
+    );
+    if (newDbMessageId) {
+      const updatedMessages = await getMessagesByDate(selectedDate);
+      setDbMessages(updatedMessages);
       if (isAiEnabled) {
-        try {
-          // Show loading state
-          setIsAiThinking(true);
-
-          // Create a system prompt to give the AI context and personality
-          const systemPrompt = `You are a helpful personal assistant for a daily reflection app. 
-          The user is reflecting on their day (${formattedDate}). 
-          Be supportive, encouraging, and help them process their thoughts and experiences. 
-          Ask thoughtful follow-up questions when appropriate.
-          Keep responses concise but meaningful (1-3 sentences).`;
-
-          // Call our OpenAI service to get a real AI response
-          const aiResponse = await openAIService.getAIResponse(
-            content,
-            systemPrompt
-          );
-
-          // Save AI response to database
-          await addMessage(aiResponse, true, "text", formattedDate);
-
-          // Refresh messages to show AI response
-          const finalMessages = await getMessagesByDate(formattedDate);
-          setMessages(finalMessages);
-        } catch (error) {
-          console.error("❌ Error getting AI response:", error);
-
-          // Show user-friendly error message
-          const errorMessage =
-            error instanceof Error
-              ? `Sorry, I'm having trouble right now: ${error.message}`
-              : "I'm sorry, I'm having trouble connecting right now. Please try again later.";
-
-          await addMessage(errorMessage, true, "text", formattedDate);
-
-          // Refresh messages to show error message
-          const finalMessages = await getMessagesByDate(formattedDate);
-          setMessages(finalMessages);
-        } finally {
-          // Hide loading state in both success and error cases
-          setIsAiThinking(false);
-        }
+        append({
+          id: newDbMessageId,
+          role: "user",
+          content: content,
+        });
       }
     }
   };

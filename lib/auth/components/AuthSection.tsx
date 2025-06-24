@@ -6,21 +6,21 @@ import {
   ActivityIndicator,
   StyleSheet,
   Linking,
+  Platform,
 } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { useGoogleAuth } from "../hooks/useGoogleAuth";
-import { LinearGradient } from "expo-linear-gradient";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 
 export default function AuthSection() {
   const { colors } = useTheme();
   const { user, signOut, isLoading: authLoading } = useAuth();
   const { signInWithGoogle, isLoading } = useGoogleAuth();
 
-  // Show loading state while checking authentication
   if (authLoading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.text.primary} />
         <Text style={[styles.loadingText, { color: colors.text.primary }]}>
           Loading...
@@ -29,126 +29,92 @@ export default function AuthSection() {
     );
   }
 
-  const displayName =
-    user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
+  // If user is authenticated, don't show anything (they will be redirected)
+  if (user) {
+    return null;
+  }
 
   return (
-    <View style={styles.container}>
-      {/* Welcome Section */}
-      {user ? (
-        <View style={styles.content}>
-          <View style={styles.welcomeContainer}>
-            <Text style={[styles.welcomeTitle, { color: colors.text.primary }]}>
-              Welcome {displayName}!
-            </Text>
-            <Text style={[styles.emailText, { color: colors.text.secondary }]}>
-              Email: {user.email}
-            </Text>
-          </View>
-          <View style={styles.buttonOuterContainer}>
-            <TouchableOpacity
-              onPress={signOut}
-              style={[
-                styles.button,
-                { backgroundColor: colors.text.destructive },
-              ]}
-            >
-              <Text style={styles.signOutButtonText}>Sign Out</Text>
-            </TouchableOpacity>
-          </View>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Top Container */}
+      <View style={styles.topContainer}>
+        <View
+          style={[
+            styles.badge,
+            {
+              backgroundColor: colors.surface.button,
+              borderColor: colors.text.secondary,
+            },
+          ]}
+        >
+          <Text style={[styles.badgeText, { color: colors.text.secondary }]}>
+            Alpha Version
+          </Text>
         </View>
-      ) : (
-        <>
-          <View style={styles.topSection}>
-            <View style={styles.welcomeContainer}>
+        <Text style={[styles.title, { color: colors.text.accent }]}>
+          The Recalibration App
+        </Text>
+        <Text style={[styles.subtitle, { color: colors.text.secondary }]}>
+          Connect With Your Emotions
+        </Text>
+      </View>
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity
+          style={[
+            styles.googleButton,
+            {
+              backgroundColor: colors.surface.button,
+              borderColor: colors.border.light,
+            },
+          ]}
+          onPress={signInWithGoogle}
+          disabled={isLoading}
+          activeOpacity={0.85}
+        >
+          {isLoading ? (
+            <ActivityIndicator color={colors.text.primary} size="small" />
+          ) : (
+            <View style={styles.googleButtonContent}>
+              <AntDesign
+                name="google"
+                size={22}
+                color="#EA4335"
+                style={{ marginRight: 8 }}
+              />
               <Text
                 style={[
-                  styles.welcomeTitle,
-                  styles.textCenter,
+                  styles.googleButtonText,
                   { color: colors.text.primary },
                 ]}
               >
-                Welcome to{" "}
-                <Text style={{ color: colors.text.accent }}>
-                  Recalibration App
-                </Text>
+                Continue with Google
               </Text>
-              {/* <Text
-                style={[
-                  styles.subheading,
-                  styles.textCenter,
-                  { color: colors.text.secondary },
-                ]}
-              >
-                Recognize and Reframe your thoughts
-              </Text> */}
-              <Text
-                style={[
-                  styles.frameworkText,
-                  styles.textCenter,
-                  { color: colors.text.primary },
-                ]}
-              >
-                Based on the Self Recalibration Framework
-              </Text>
+              <MaterialIcons
+                name="arrow-forward-ios"
+                size={18}
+                color={colors.text.secondary}
+                style={{ marginLeft: 8 }}
+              />
             </View>
-          </View>
-
-          <View style={styles.middleSection}>
-            <LinearGradient
-              colors={colors.gradients.card.outer}
-              style={styles.signInCardGradient}
-            >
-              <LinearGradient
-                colors={colors.gradients.card.inner}
-                style={styles.signInCard}
-              >
-                <Text
-                  style={[styles.signInTitle, { color: colors.text.accent }]}
-                >
-                  Sign in to reframe your thoughts
-                </Text>
-                <TouchableOpacity
-                  onPress={signInWithGoogle}
-                  disabled={isLoading}
-                  style={[styles.button, { backgroundColor: "white" }]}
-                >
-                  {isLoading ? (
-                    <ActivityIndicator color="black" size="small" />
-                  ) : (
-                    // Icon placeholder
-                    <Text style={[styles.buttonText, { color: "black" }]}>
-                      Continue with Google
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </LinearGradient>
-            </LinearGradient>
-          </View>
-          <View style={styles.bottomSection}>
-            <View style={styles.footer}>
-              <Text
-                style={[styles.footerText, { color: colors.text.secondary }]}
-              >
-                By continuing, you agree to our{" "}
-                <Text
-                  style={[styles.linkText, { color: colors.text.primary }]}
-                  onPress={() => Linking.openURL("#")}
-                >
-                  Terms of Service
-                </Text>{" "}
-                and{" "}
-                <Text
-                  style={[styles.linkText, { color: colors.text.primary }]}
-                  onPress={() => Linking.openURL("#")}
-                >
-                  Privacy Policy
-                </Text>
-              </Text>
-            </View>
-          </View>
-        </>
-      )}
+          )}
+        </TouchableOpacity>
+        <Text style={[styles.terms, { color: colors.text.secondary }]}>
+          By continuing, you agree to our{" "}
+          <Text
+            style={[styles.link, { color: colors.text.primary }]}
+            onPress={() => Linking.openURL("#")}
+          >
+            Terms of Service
+          </Text>{" "}
+          and{" "}
+          <Text
+            style={[styles.link, { color: colors.text.primary }]}
+            onPress={() => Linking.openURL("#")}
+          >
+            Privacy Policy
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 }
@@ -161,112 +127,102 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    width: "100%",
-  },
-  content: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  topSection: {
-    flex: 2,
     justifyContent: "center",
     width: "100%",
+    gap: 125,
+    paddingHorizontal: 18,
+    backgroundColor: "transparent",
   },
-  middleSection: {
-    flex: 3,
-    justifyContent: "center",
+  topContainer: {
     width: "100%",
     alignItems: "center",
   },
-  bottomSection: {
-    flex: 1,
-    justifyContent: "flex-end",
+  middleContainer: {
     width: "100%",
-    paddingBottom: 16,
-  },
-  welcomeContainer: {
     alignItems: "center",
   },
-  welcomeTitle: {
+  cardBg: {
+    width: "100%",
+    maxWidth: 420,
+    borderRadius: 20,
+    borderWidth: 1,
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 11,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  bottomContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  badge: {
+    alignSelf: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: 18,
+    marginTop: 10,
+  },
+  badgeText: {
+    fontSize: 14,
+    fontWeight: "500",
+    letterSpacing: 0.5,
+  },
+  title: {
     fontSize: 34,
     fontWeight: "bold",
-    marginBottom: 16,
     textAlign: "center",
+    marginBottom: 4,
   },
-  emailText: {
-    fontSize: 18,
+  subtitle: {
+    fontSize: 22,
+    textAlign: "center",
     marginBottom: 32,
   },
-  subheading: {
-    fontSize: 18,
-    maxWidth: 340,
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  frameworkText: {
-    fontSize: 20,
-    // maxWidth: 300,
-    textAlign: "center",
-    fontWeight: "500",
-    marginTop: 50,
-  },
-  textCenter: {
-    textAlign: "center",
-  },
-  buttonOuterContainer: {
-    width: "100%",
-    maxWidth: 340,
-  },
-  signInCardGradient: {
-    borderRadius: 20,
-    padding: 1,
-    width: "100%",
-    maxWidth: 340,
-  },
-  signInCard: {
-    width: "100%",
-    padding: 24,
-    borderRadius: 19,
-    alignItems: "center",
-  },
-  signInTitle: {
-    fontSize: 18,
+  cardTitle: {
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 20,
+    textAlign: "center",
+    marginBottom: 10,
   },
-  signInSubtitle: {
+  cardDesc: {
     fontSize: 14,
-    marginBottom: 24,
+    textAlign: "center",
+    lineHeight: 22,
   },
-  button: {
+  googleButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    maxWidth: 480,
     borderRadius: 12,
+    paddingVertical: 16,
+    marginBottom: 18,
+    borderWidth: 1,
+    marginTop: 2,
   },
-  buttonText: {
+  googleButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  googleButtonText: {
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: 17,
   },
-  signOutButtonText: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: 18,
-  },
-  footer: {
-    maxWidth: 340,
-    alignSelf: "center",
-  },
-  footerText: {
+  terms: {
+    fontSize: 13,
     textAlign: "center",
-    fontSize: 12,
+    marginBottom: 18,
+    marginTop: 2,
+    paddingHorizontal: 8,
   },
-  linkText: {
+  link: {
     textDecorationLine: "underline",
   },
 });
