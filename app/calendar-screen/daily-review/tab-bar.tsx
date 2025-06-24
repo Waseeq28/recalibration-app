@@ -12,54 +12,43 @@ interface TabBarProps {
 export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
   const { colors } = useTheme();
 
+  const TabButton = ({
+    tabType,
+    label,
+  }: {
+    tabType: TabType;
+    label: string;
+  }) => {
+    const isActive = activeTab === tabType;
+
+    return (
+      <TouchableOpacity
+        className="flex-1 items-center justify-center py-2 px-3 rounded-t-xl"
+        style={{
+          backgroundColor: isActive ? colors.text.accent : "transparent",
+          opacity: isActive ? 0.8 : 1,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.border.light,
+        }}
+        onPress={() => onTabChange(tabType)}
+        activeOpacity={0.8}
+      >
+        <Text
+          className="text-sm font-medium"
+          style={{
+            color: isActive ? "#ffffff" : colors.text.secondary,
+          }}
+        >
+          {label}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View className="flex-row py-1">
-      <TouchableOpacity
-        className="flex-1 flex-row items-center justify-center py-2 px-3 mx-1"
-        style={{
-          borderBottomWidth: activeTab === "ai-chat" ? 1 : 0,
-          borderBottomColor:
-            activeTab === "ai-chat" ? colors.text.primary : "transparent",
-        }}
-        onPress={() => onTabChange("ai-chat")}
-        activeOpacity={0.7}
-      >
-        <Text
-          className="text-sm font-medium"
-          style={{
-            color:
-              activeTab === "ai-chat"
-                ? colors.text.primary
-                : colors.text.secondary,
-          }}
-        >
-          AI Chat
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        className="flex-1 flex-row items-center justify-center py-2 px-3 mx-1"
-        style={{
-          borderBottomWidth: activeTab === "emotional-profile" ? 1 : 0,
-          borderBottomColor:
-            activeTab === "emotional-profile"
-              ? colors.text.primary
-              : "transparent",
-        }}
-        onPress={() => onTabChange("emotional-profile")}
-        activeOpacity={0.7}
-      >
-        <Text
-          className="text-sm font-medium"
-          style={{
-            color:
-              activeTab === "emotional-profile"
-                ? colors.text.primary
-                : colors.text.secondary,
-          }}
-        >
-          Emotion Profile
-        </Text>
-      </TouchableOpacity>
+    <View className="flex-row py-1 px-1">
+      <TabButton tabType="ai-chat" label="AI Chat" />
+      <TabButton tabType="emotional-profile" label="Emotion Profile" />
     </View>
   );
 }
