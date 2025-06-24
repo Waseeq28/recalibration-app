@@ -1,53 +1,119 @@
-This repo only runs with `npm` at the moment. So the developers need to
-`cd` into `apps/mobile` directory, and run `npm run start`.
+# The Recalibration App
 
-# Welcome to your Expo app 👋
+**A comprehensive mental wellness companion powered by AI and structured self-reflection**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 🎯 Vision & Purpose
 
-## Get started
+The Recalibration App is designed as a **personal emotional wellness companion** that helps users develop better emotional intelligence and maintain mental wellbeing through systematic daily reflection and AI-guided processing.
 
-1. Install dependencies
+### Core User Value
 
-   ```bash
-   npm install
-   ```
+- **Daily Self-Reflection & Journaling** through conversational AI
+- **Emotional Intelligence Development** with structured emotional processing
+- **Actionable Personal Growth** via systematic framework navigation
+- **Sustainable Habit Formation** using evidence-based methodologies
+- **Mental Health Maintenance** through consistent self-awareness practices
 
-2. Start the app
+The app helps users **recalibrate** their mental and emotional state through structured reflection, emotional processing, and actionable planning.
 
-   ```bash
-    npx expo start
-   ```
+## 🧠 Self-Recalibration Framework for Mental Health
 
-In the output, you'll find options to open the app in a
+The application is built around a comprehensive 5-stage framework that guides users through systematic mental wellness practices:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### **Stage 1: Self-Awareness – Understanding Your Current State**
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+**Goal:** Become an impartial observer of your inner world, recognizing emotional and mental patterns without judgment.
 
-## Get a fresh project
+- **Daily Reflection Check-ins:** Quick emotional snapshots to capture immediate feelings, frustrations, and wins
+- **Weekly/Monthly Reflection Check-ins:** Broader reviews to identify patterns and behavioral themes over time
 
-When you're ready, run:
+### **Stage 2: Emotional Processing**
 
-```bash
-npm run reset-project
-```
+**Goal:** Reduce emotional chaos by acknowledging, naming, and validating responses through "Emotional Energy Profiling."
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- **Name the Emotion:** Move from vague feelings to specific labels
+- **Validate the Emotion:** Practice self-compassion without judgment
+- **Map the Impact:** Observe physical manifestations and intensity levels
 
-## Learn more
+### **Stage 3: Rational Processing**
 
-To learn more about developing your project with Expo, look at the following resources:
+**Goal:** Step back from emotional intensity and analyze situations objectively.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Detached Observation:** Separate facts from interpretive stories
+- **Prioritization Matrix:** Categorize problems using adapted Eisenhower Matrix (Urgent/Important)
 
-## Join the community
+### **Stage 4: Action Planning**
 
-Join our community of developers creating universal apps.
+**Goal:** Integrate emotional and rational insights to choose conscious, effective responses.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**The 5 R's Framework:**
+
+- **Refine:** Make small behavioral adjustments
+- **Refrain:** Stop unhelpful behaviors or avoid triggers
+- **Reframe:** Find new perspectives on situations
+- **Remain/Accept:** Acknowledge things outside your control
+- **Assess:** Consider the cost of inaction
+
+### **Stage 5: Acting, Assessing and Adapting**
+
+**Goal:** Translate plans into sustainable action with continuous learning and adjustment.
+
+- **1% Rule:** Commit to tiny, daily improvements
+- **Three Buckets Approach:** Balance Growth, Maintenance, and Joy daily
+- **Recovery Protocol:** Pre-planned responses for difficult periods
+
+## 📱 Application Features
+
+### **Calendar-Centric Design**
+
+- Daily conversation threads organized by date
+- Historical reflection review and pattern recognition
+- Visual timeline of emotional and mental journey
+
+### **AI-Powered Conversations**
+
+- Framework-guided chat sessions for daily reflection
+- Intelligent extraction of insights from conversations
+- Non-judgmental companion for processing experiences
+
+### **Emotion Profile Generation**
+
+Each day's conversation automatically generates a comprehensive profile including:
+
+1. **Today's Theme** - Overall context and summary
+2. **Primary Emotion** - Key emotional state with intensity visualization
+3. **Self-Compassion** - Internal dialogue and self-kindness assessment
+4. **Key Challenge** - Main trigger or difficult situation
+5. **Main Focus** - Most important priority identified
+6. **Action Plan** - Specific steps and commitments
+7. **Daily Win** - Progress and 1% improvements
+8. **Daily Balance** - Growth/Maintenance/Joy activities
+
+## 🏗 Technical Architecture
+
+### **Authentication & Privacy**
+
+- Secure Google OAuth integration
+- Private, encrypted conversation storage
+- Personal data protection and user control
+
+### **Frontend**
+
+- **React Native** with Expo for cross-platform mobile development
+- **TypeScript** for type safety and better developer experience
+- **Tailwind CSS (NativeWind)** for consistent, responsive styling
+- **Expo Router** for file-based navigation
+
+### **Backend & AI**
+
+- **Supabase** for database, authentication, and real-time features
+- **OpenAI Integration** via AI SDK for intelligent conversation processing
+- **Real-time message synchronization** between AI chat and emotion profiles
+
+### **Key Dependencies**
+
+- `@ai-sdk/react` & `@ai-sdk/openai` - AI conversation handling
+- `@supabase/supabase-js` - Backend integration
+- `react-native-calendars` - Calendar interface
+- `expo-auth-session` - Authentication flow
+- `lucide-react-native` - Consistent iconography
