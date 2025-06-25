@@ -2,32 +2,28 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  MessageCircleIcon,
   HeartIcon,
   AlertTriangleIcon,
-  TargetIcon,
   CheckCircleIcon,
-  StarIcon,
-  ActivityIcon,
   HighlighterIcon,
   HandHeartIcon,
   RocketIcon,
 } from "lucide-react-native";
-import ProfileCard from "./profile-card";
+import ParameterCard from "./parameter-card";
 import IntensityIndicator from "./intensity-indicator";
-import { EmotionProfileData } from "../data/sample-data";
+import { EmotionProfileData } from "@/lib/services/emotionAnalysisService";
 
-interface ProfileSectionsProps {
+interface ParameterSectionsProps {
   data: EmotionProfileData;
 }
 
-export default function ProfileSections({ data }: ProfileSectionsProps) {
+export default function ParameterSections({ data }: ParameterSectionsProps) {
   const { colors } = useTheme();
 
   return (
     <>
       {/* Today's Theme */}
-      <ProfileCard
+      <ParameterCard
         icon={
           <View
             className="w-9 h-9 rounded-full items-center justify-center"
@@ -44,10 +40,10 @@ export default function ProfileSections({ data }: ProfileSectionsProps) {
         >
           {data.themeSummary}
         </Text>
-      </ProfileCard>
+      </ParameterCard>
 
       {/* Primary Emotion */}
-      <ProfileCard
+      <ParameterCard
         icon={
           <View
             className="w-9 h-9 rounded-full items-center justify-center"
@@ -77,12 +73,12 @@ export default function ProfileSections({ data }: ProfileSectionsProps) {
           className="text-sm leading-5"
           style={{ color: colors.text.secondary }}
         >
-          Physical: {data.emotionalIntensity.physicalManifestation}
+          Manifestation: {data.emotionalIntensity.physicalManifestation}
         </Text>
-      </ProfileCard>
+      </ParameterCard>
 
       {/* Self-Compassion */}
-      <ProfileCard
+      <ParameterCard
         icon={
           <View
             className="w-9 h-9 rounded-full items-center justify-center"
@@ -99,10 +95,10 @@ export default function ProfileSections({ data }: ProfileSectionsProps) {
         >
           {data.selfCompassion}
         </Text>
-      </ProfileCard>
+      </ParameterCard>
 
       {/* Key Challenge */}
-      <ProfileCard
+      <ParameterCard
         icon={
           <View
             className="w-9 h-9 rounded-full items-center justify-center"
@@ -119,30 +115,10 @@ export default function ProfileSections({ data }: ProfileSectionsProps) {
         >
           {data.keyChallenge}
         </Text>
-      </ProfileCard>
-
-      {/* Main Focus */}
-      <ProfileCard
-        icon={
-          <View
-            className="w-9 h-9 rounded-full items-center justify-center"
-            style={{ backgroundColor: "#3b82f6" }}
-          >
-            <TargetIcon size={18} color="#ffffff" />
-          </View>
-        }
-        title="Main Focus"
-      >
-        <Text
-          style={{ color: colors.text.primary }}
-          className="text-base leading-6"
-        >
-          {data.mainFocus}
-        </Text>
-      </ProfileCard>
+      </ParameterCard>
 
       {/* Action Plan */}
-      <ProfileCard
+      <ParameterCard
         icon={
           <View
             className="w-9 h-9 rounded-full items-center justify-center"
@@ -159,10 +135,10 @@ export default function ProfileSections({ data }: ProfileSectionsProps) {
         >
           {data.actionPlan}
         </Text>
-      </ProfileCard>
+      </ParameterCard>
 
       {/* Daily Win */}
-      <ProfileCard
+      <ParameterCard
         icon={
           <View
             className="w-9 h-9 rounded-full items-center justify-center"
@@ -179,87 +155,7 @@ export default function ProfileSections({ data }: ProfileSectionsProps) {
         >
           {data.dailyWin}
         </Text>
-      </ProfileCard>
-
-      {/* Daily Balance */}
-      <View className="mb-6">
-        <ProfileCard
-          icon={
-            <View
-              className="w-9 h-9 rounded-full items-center justify-center"
-              style={{ backgroundColor: "#8b5cf6" }}
-            >
-              <ActivityIcon size={18} color="#ffffff" />
-            </View>
-          }
-          title="Daily Balance"
-        >
-          <View className="gap-2">
-            <View>
-              <View className="flex-row items-center mb-2">
-                <View
-                  className="w-4 h-4 rounded-full mr-3"
-                  style={{ backgroundColor: "#22c55e" }}
-                />
-                <Text
-                  className="text-base font-semibold"
-                  style={{ color: "#22c55e" }}
-                >
-                  Growth
-                </Text>
-              </View>
-              <Text
-                className="text-base leading-6 ml-7"
-                style={{ color: colors.text.primary }}
-              >
-                {data.threeBuckets.growth}
-              </Text>
-            </View>
-
-            <View>
-              <View className="flex-row items-center mb-2">
-                <View
-                  className="w-4 h-4 rounded-full mr-3"
-                  style={{ backgroundColor: "#3b82f6" }}
-                />
-                <Text
-                  className="text-base font-semibold"
-                  style={{ color: "#3b82f6" }}
-                >
-                  Maintenance
-                </Text>
-              </View>
-              <Text
-                className="text-base leading-6 ml-7"
-                style={{ color: colors.text.primary }}
-              >
-                {data.threeBuckets.maintenance}
-              </Text>
-            </View>
-
-            <View>
-              <View className="flex-row items-center mb-2">
-                <View
-                  className="w-4 h-4 rounded-full mr-3"
-                  style={{ backgroundColor: "#f59e0b" }}
-                />
-                <Text
-                  className="text-base font-semibold"
-                  style={{ color: "#f59e0b" }}
-                >
-                  Joy
-                </Text>
-              </View>
-              <Text
-                className="text-base leading-6 ml-7"
-                style={{ color: colors.text.primary }}
-              >
-                {data.threeBuckets.joy}
-              </Text>
-            </View>
-          </View>
-        </ProfileCard>
-      </View>
+      </ParameterCard>
     </>
   );
 }

@@ -3,19 +3,19 @@ import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "@/contexts/ThemeContext";
 
-interface ProfileCardProps {
+interface ParameterCardProps {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
   rightElement?: React.ReactNode;
 }
 
-export default function ProfileCard({
+export default function ParameterCard({
   icon,
   title,
   children,
   rightElement,
-}: ProfileCardProps) {
+}: ParameterCardProps) {
   const { colors } = useTheme();
 
   return (

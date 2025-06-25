@@ -23,7 +23,7 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
   const messageDate = new Date(selectedDate);
 
   const initialMessages = useMemo(() => {
-    return dbMessages.map(
+    const mappedMessages = dbMessages.map(
       (msg) =>
         ({
           id: msg.id,
@@ -32,6 +32,15 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
           createdAt: new Date(msg.createdAt),
         } as Message)
     );
+
+    // Debug: Check for duplicate IDs
+    const ids = mappedMessages.map((m) => m.id);
+    const uniqueIds = new Set(ids);
+    if (ids.length !== uniqueIds.size) {
+      console.warn("Duplicate message IDs detected:", ids);
+    }
+
+    return mappedMessages;
   }, [dbMessages]);
 
   const {
