@@ -32,7 +32,7 @@ export default function MessageListing({ messages }: MessageListingProps) {
       <FlatList
         data={messages}
         renderItem={({ item }) => <MessageCard {...item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         className="w-full px-3"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingVertical: 8 }}
