@@ -32,12 +32,9 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
       </View>
     );
   }
+
   // If user is not authenticated, show fallback or nothing while redirecting
   if (!user) {
-    useEffect(() => {
-      router.replace("/(home)");
-    }, []);
-
     if (fallback) {
       return <>{fallback}</>;
     }
