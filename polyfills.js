@@ -1,6 +1,10 @@
 import { Platform } from "react-native";
 import structuredClone from "@ungap/structured-clone";
 
+if (!global.Buffer) {
+  global.Buffer = require("buffer").Buffer;
+}
+
 if (Platform.OS !== "web") {
   const setupPolyfills = async () => {
     const { polyfillGlobal } = await import(
