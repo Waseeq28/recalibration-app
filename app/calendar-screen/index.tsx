@@ -24,13 +24,11 @@ export default function CalendarViewScreen() {
 
   const handleDayPress = (day: any) => {
     setSelectedDate(day.dateString);
-    // Update month based on selected date
     const selectedMonth = format(new Date(day.dateString), "MMMM yyyy");
     setCurrentMonth(selectedMonth);
   };
 
   const handleVisibleMonthsChange = (months: any[]) => {
-    // Update month based on first visible month (more reliable for WeekCalendar)
     if (months && months.length > 0) {
       const firstMonth = months[0];
       const monthDate = new Date(firstMonth.year, firstMonth.month - 1);
@@ -53,7 +51,6 @@ export default function CalendarViewScreen() {
             onToggleCalendar={toggleCalendar}
           />
         </View>
-        {/* Week Calendar - Conditionally Rendered */}
         {!isCalendarCollapsed && (
           <View>
             <WeekCalendarComponent
@@ -64,7 +61,6 @@ export default function CalendarViewScreen() {
           </View>
         )}
 
-        {/* Content Area with Tabs */}
         <View
           style={{
             flex: 1,

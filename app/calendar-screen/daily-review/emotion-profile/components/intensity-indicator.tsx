@@ -7,9 +7,9 @@ interface IntensityIndicatorProps {
 
 export default function IntensityIndicator({ level }: IntensityIndicatorProps) {
   const getIntensityColor = (level: number) => {
-    if (level <= 3) return "#22c55e"; // Green
-    if (level <= 6) return "#f59e0b"; // Yellow
-    return "#ef4444"; // Red
+    if (level <= 3) return "#22c55e";
+    if (level <= 6) return "#f59e0b";
+    return "#ef4444";
   };
 
   const getIntensityLabel = (level: number) => {

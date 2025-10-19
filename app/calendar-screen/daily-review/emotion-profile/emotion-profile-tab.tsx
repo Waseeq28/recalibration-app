@@ -32,13 +32,11 @@ export default function EmotionProfileTab({
     useEmotionAnalysis();
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // Load messages for the selected date
   useEffect(() => {
     const loadMessages = async () => {
       try {
         const dateMessages = await getMessagesByDate(selectedDate);
 
-        // Convert database messages to AI SDK format
         const aiMessages: Message[] = dateMessages.map((msg) => ({
           id: msg.id,
           content: msg.content,
@@ -47,8 +45,6 @@ export default function EmotionProfileTab({
         }));
 
         setMessages(aiMessages);
-
-        // Remove auto-analysis - now manual only
       } catch (error) {
         console.error("Error loading messages for emotion analysis:", error);
       }
@@ -63,7 +59,6 @@ export default function EmotionProfileTab({
     analyzeEmotions,
   ]);
 
-  // Clear analysis when date changes
   useEffect(() => {
     clearAnalysis();
   }, [selectedDate, clearAnalysis]);
@@ -74,7 +69,6 @@ export default function EmotionProfileTab({
     }
   };
 
-  // Show loading state
   if (isAnalyzing) {
     return (
       <View
@@ -102,7 +96,6 @@ export default function EmotionProfileTab({
     );
   }
 
-  // Show error state
   if (error) {
     return (
       <View
@@ -147,7 +140,6 @@ export default function EmotionProfileTab({
     );
   }
 
-  // Show empty state when no sufficient messages
   if (messages.length < 2) {
     return (
       <View
@@ -178,7 +170,6 @@ export default function EmotionProfileTab({
     );
   }
 
-  // Only show analysis if we have real AI-generated data
   if (!emotionProfile) {
     return (
       <View
@@ -213,7 +204,6 @@ export default function EmotionProfileTab({
               : "Chat with AI about your day, then return here to generate personalized emotional insights."}
           </Text>
 
-          {/* Show analyze button when sufficient messages and no error, or retry button on error */}
           {messages.length >= 2 && (
             <TouchableOpacity
               onPress={handleRefreshAnalysis}
@@ -257,14 +247,12 @@ export default function EmotionProfileTab({
       }}
     >
       <ScrollView className="flex-1 p-2" showsVerticalScrollIndicator={false}>
-        {/* Analysis Status */}
         <AnalysisStatus
           isAnalyzing={isAnalyzing}
           hasAnalysis={!!emotionProfile}
           error={error}
         />
 
-        {/* Manual test button for regenerating analysis */}
         <TouchableOpacity
           onPress={handleRefreshAnalysis}
           className="flex-row items-center justify-center mb-4 py-3 px-6 rounded-lg"
@@ -276,10 +264,8 @@ export default function EmotionProfileTab({
           </Text>
         </TouchableOpacity>
 
-        {/* Show ONLY real AI-generated insights */}
         <ParameterSections data={emotionProfile} />
 
-        {/* Show timestamp of analysis */}
         <View
           className="mt-4 p-3 rounded-lg"
           style={{ backgroundColor: colors.surface.secondary }}

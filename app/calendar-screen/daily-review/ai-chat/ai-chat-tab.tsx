@@ -33,7 +33,6 @@ export default function AiChatTab({ selectedDate }: AiChatTabProps) {
         } as Message)
     );
 
-    // Debug: Check for duplicate IDs
     const ids = mappedMessages.map((m) => m.id);
     const uniqueIds = new Set(ids);
     if (ids.length !== uniqueIds.size) {

@@ -29,14 +29,12 @@ export default function AuthSection() {
     );
   }
 
-  // If user is authenticated, don't show anything (they will be redirected)
   if (user) {
     return null;
   }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Top Container */}
       <View style={styles.topContainer}>
         <View
           style={[

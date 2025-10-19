@@ -30,7 +30,6 @@ export default function Profile({ onPress }: ProfileProps) {
 
   const displayName =
     user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
-  // Extract first name from full name
   const firstName = displayName.split(" ")[0];
   const userEmail = user?.email || "";
 
@@ -48,7 +47,6 @@ export default function Profile({ onPress }: ProfileProps) {
           borderColor: colors.border.light,
         }}
       >
-        {/* User Name */}
         <DropdownMenuItem className="p-3">
           <View className="flex-row items-center">
             <UserIcon size={16} color={colors.text.secondary} />
@@ -61,7 +59,6 @@ export default function Profile({ onPress }: ProfileProps) {
           </View>
         </DropdownMenuItem>
 
-        {/* User Email */}
         <DropdownMenuItem className="p-3">
           <View className="flex-row items-center">
             <MailIcon size={16} color={colors.text.secondary} />
@@ -78,7 +75,6 @@ export default function Profile({ onPress }: ProfileProps) {
           style={{ backgroundColor: colors.border.light }}
         />
 
-        {/* Sign Out */}
         <DropdownMenuItem onPress={handleSignOut} className="p-3">
           <View className="flex-row items-center">
             <LogOutIcon size={16} color={colors.text.destructive} />

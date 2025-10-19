@@ -11,7 +11,6 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Get the current session after OAuth callback
         const { data, error } = await supabase.auth.getSession();
 
         if (error) {
@@ -33,7 +32,6 @@ export default function AuthCallback() {
       }
     };
 
-    // Small delay to ensure the auth state is properly set
     const timer = setTimeout(handleAuthCallback, 1000);
 
     return () => clearTimeout(timer);

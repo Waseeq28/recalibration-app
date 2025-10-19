@@ -24,12 +24,10 @@ export default function DateHeader({
 
   return (
     <View className="px-4 py-3 flex-row items-center justify-between">
-      {/* Left: Profile */}
       <View>
         {!isCalendarCollapsed && <Profile onPress={onProfilePress} />}
       </View>
 
-      {/* Center: Date */}
       <TouchableOpacity onPress={onToggleCalendar}>
         <Text
           className="text-center text-base font-medium px-20"
@@ -41,7 +39,6 @@ export default function DateHeader({
         </Text>
       </TouchableOpacity>
 
-      {/* Right: Chevron */}
       <View>
         <TouchableOpacity onPress={onToggleCalendar} className="p-2">
           {isCalendarCollapsed ? (

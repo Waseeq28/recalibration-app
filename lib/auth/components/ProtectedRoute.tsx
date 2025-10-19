@@ -14,14 +14,12 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
   const { colors } = useTheme();
   const router = useRouter();
 
-  // Handle redirect when user is not authenticated
   useEffect(() => {
     if (!isLoading && !user) {
       router.replace("/(home)");
     }
   }, [user, isLoading, router]);
 
-  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <View style={[styles.centered, { backgroundColor: colors.background }]}>
@@ -33,15 +31,13 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
     );
   }
 
-  // If user is not authenticated, show fallback or nothing while redirecting
   if (!user) {
     if (fallback) {
       return <>{fallback}</>;
     }
-    return null; // Don't render anything while redirecting
+    return null;
   }
 
-  // User is authenticated, render the protected content
   return <>{children}</>;
 }
 

@@ -19,7 +19,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
     const getInitialSession = async () => {
       try {
         const {
@@ -37,11 +36,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     getInitialSession();
 
-    // Handle deep link OAuth callbacks
     const handleDeepLink = async (url: string) => {
       if (url.includes("access_token")) {
         try {
-          // Parse the URL hash fragment
           const urlObj = new URL(url.replace("#", "?"));
           const accessToken = urlObj.searchParams.get("access_token");
           const refreshToken = urlObj.searchParams.get("refresh_token");
@@ -52,25 +49,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               refresh_token: refreshToken,
             });
           }
-        } catch (error) {
-          // Handle error silently
-        }
+        } catch (error) {}
       }
     };
 
-    // Get initial URL (if app was opened via deep link)
     Linking.getInitialURL().then((url) => {
       if (url) {
         handleDeepLink(url);
       }
     });
 
-    // Listen for URL changes (deep links while app is running)
     const linkingSubscription = Linking.addEventListener("url", ({ url }) => {
       handleDeepLink(url);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -88,11 +80,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      // Immediately redirect to auth screen after sign out
       router.replace("/(home)");
-    } catch (error) {
-      // Handle error silently
-    }
+    } catch (error) {}
   };
 
   return (

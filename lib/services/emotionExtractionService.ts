@@ -1,4 +1,4 @@
-import { Message } from '@ai-sdk/react';
+import { Message } from "@ai-sdk/react";
 
 export interface ExtractionPrompts {
   themeSummary: string;
@@ -11,11 +11,10 @@ export interface ExtractionPrompts {
 }
 
 export class EmotionExtractionService {
-  
   static generateConversationContext(messages: Message[]): string {
     return messages
-      .map(msg => `${msg.role === 'user' ? 'User' : 'AI'}: ${msg.content}`)
-      .join('\n\n');
+      .map((msg) => `${msg.role === "user" ? "User" : "AI"}: ${msg.content}`)
+      .join("\n\n");
   }
 
   static getExtractionPrompts(): ExtractionPrompts {
@@ -127,24 +126,26 @@ CONVERSATION:
 {conversation}
 
 EXTRACT: Positive achievements, wins, or accomplishments using past tense "I accomplished..." format`,
-
-
     };
   }
 
-  static createExtractionPrompt(parameterPrompt: string, conversation: string): string {
-    return parameterPrompt.replace('{conversation}', conversation);
+  static createExtractionPrompt(
+    parameterPrompt: string,
+    conversation: string,
+  ): string {
+    return parameterPrompt.replace("{conversation}", conversation);
   }
 
-  static validateExtractionResponse(response: string, parameter: string): string {
-    // Clean up the response
+  static validateExtractionResponse(
+    response: string,
+    parameter: string,
+  ): string {
     const cleaned = response.trim();
-    
-    // If response is too short or generic, return a default
+
     if (cleaned.length < 10) {
       return `No clear ${parameter} information extracted from conversation`;
     }
-    
+
     return cleaned;
   }
-} 
+}

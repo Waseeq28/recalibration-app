@@ -10,7 +10,6 @@ export default function HomeScreen() {
   const { colors } = useTheme();
   const { user } = useAuth();
 
-  // Redirect authenticated users directly to calendar screen
   useEffect(() => {
     if (user) {
       router.replace("/calendar-screen");
@@ -19,7 +18,6 @@ export default function HomeScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Authentication Section - only shown for unauthenticated users */}
       <AuthSection />
     </View>
   );

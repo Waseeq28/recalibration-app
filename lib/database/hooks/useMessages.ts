@@ -4,18 +4,17 @@ import { nanoid } from "nanoid";
 import { format } from "date-fns";
 import { useAuth } from "@/lib/auth/context/AuthContext";
 
-// Message types
 export type MessageType = "text";
 
 export interface Message {
   id: string;
   type: MessageType;
   content: string;
-  timestamp: string; // ISO timestamp string from database
-  date: string; // ISO date string from database
+  timestamp: string;
+  date: string;
   isAiGenerated: boolean;
-  createdAt: string; // ISO timestamp string from database
-  user_id: string; // User ID who created the message
+  createdAt: string;
+  user_id: string;
 }
 
 const formatTimestamp = (date: Date): string => {
@@ -35,14 +34,15 @@ export function useSupabaseMessages() {
       content: string,
       isAiGenerated: boolean = false,
       type: MessageType = "text",
-      customDate?: Date
+      customDate?: Date,
     ): Promise<string | null> => {
       try {
         setIsLoading(true);
 
         const now = new Date();
-        // Ensure we have a valid Date object
-        const messageDate = (customDate && customDate instanceof Date) ? customDate : now;
+        const messageDate = (customDate && customDate instanceof Date)
+          ? customDate
+          : now;
 
         if (!user) {
           console.error("User not authenticated");
@@ -53,11 +53,11 @@ export function useSupabaseMessages() {
           id: nanoid(),
           type,
           content,
-          timestamp: now.toISOString(), // Store as ISO timestamp
-          date: messageDate.toISOString().split('T')[0], // Store as YYYY-MM-DD
+          timestamp: now.toISOString(),
+          date: messageDate.toISOString().split("T")[0],
           isAiGenerated,
-          createdAt: now.toISOString(), // Store as ISO timestamp
-          user_id: user.id, // Add user ID to the message
+          createdAt: now.toISOString(),
+          user_id: user.id,
         };
 
         const { error } = await supabase.from("messages").insert(newMessage);
@@ -75,7 +75,7 @@ export function useSupabaseMessages() {
         setIsLoading(false);
       }
     },
-    [user]
+    [user],
   );
 
   const getMessageById = useCallback(
@@ -103,7 +103,7 @@ export function useSupabaseMessages() {
         return null;
       }
     },
-    [user]
+    [user],
   );
 
   const getMessagesByDate = useCallback(
@@ -114,7 +114,6 @@ export function useSupabaseMessages() {
           return [];
         }
 
-        // Expect date in YYYY-MM-DD format
         const { data, error } = await supabase
           .from("messages")
           .select("*")
@@ -132,7 +131,7 @@ export function useSupabaseMessages() {
         return [];
       }
     },
-    [user]
+    [user],
   );
 
   const getAllMessages = useCallback(async (): Promise<Message[]> => {
@@ -180,7 +179,6 @@ export function useSupabaseMessages() {
     }
   }, [user]);
 
-  // Helper functions to format database timestamps/dates for display
   const formatMessageTimestamp = useCallback((timestamp: string): string => {
     return formatTimestamp(new Date(timestamp));
   }, []);

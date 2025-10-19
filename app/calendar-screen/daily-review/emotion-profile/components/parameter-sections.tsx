@@ -22,7 +22,6 @@ export default function ParameterSections({ data }: ParameterSectionsProps) {
 
   return (
     <>
-      {/* Today's Theme */}
       <ParameterCard
         icon={
           <View
@@ -42,7 +41,6 @@ export default function ParameterSections({ data }: ParameterSectionsProps) {
         </Text>
       </ParameterCard>
 
-      {/* Primary Emotion */}
       <ParameterCard
         icon={
           <View
@@ -77,7 +75,6 @@ export default function ParameterSections({ data }: ParameterSectionsProps) {
         </Text>
       </ParameterCard>
 
-      {/* Self-Compassion */}
       <ParameterCard
         icon={
           <View
@@ -97,7 +94,6 @@ export default function ParameterSections({ data }: ParameterSectionsProps) {
         </Text>
       </ParameterCard>
 
-      {/* Key Challenge */}
       <ParameterCard
         icon={
           <View
@@ -117,7 +113,6 @@ export default function ParameterSections({ data }: ParameterSectionsProps) {
         </Text>
       </ParameterCard>
 
-      {/* Action Plan */}
       <ParameterCard
         icon={
           <View
@@ -137,7 +132,6 @@ export default function ParameterSections({ data }: ParameterSectionsProps) {
         </Text>
       </ParameterCard>
 
-      {/* Daily Win */}
       <ParameterCard
         icon={
           <View
