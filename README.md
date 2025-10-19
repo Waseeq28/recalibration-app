@@ -2,7 +2,7 @@
 
 **A comprehensive mental wellness companion powered by AI and structured self-reflection**
 
-## 🎯 Vision & Purpose
+## Vision & Purpose
 
 The Recalibration App is designed as a **personal emotional wellness companion** that helps users develop better emotional intelligence and maintain mental wellbeing through systematic daily reflection and AI-guided processing.
 
@@ -16,7 +16,7 @@ The Recalibration App is designed as a **personal emotional wellness companion**
 
 The app helps users **recalibrate** their mental and emotional state through structured reflection, emotional processing, and actionable planning.
 
-## 🧠 Self-Recalibration Framework for Mental Health
+## Self-Recalibration Framework for Mental Health
 
 The application is built around a comprehensive 5-stage framework that guides users through systematic mental wellness practices:
 
@@ -62,7 +62,7 @@ The application is built around a comprehensive 5-stage framework that guides us
 - **Three Buckets Approach:** Balance Growth, Maintenance, and Joy daily
 - **Recovery Protocol:** Pre-planned responses for difficult periods
 
-## 📱 Application Features
+## Application Features
 
 ### **Calendar-Centric Design**
 
@@ -89,7 +89,7 @@ Each day's conversation automatically generates a comprehensive profile includin
 7. **Daily Win** - Progress and 1% improvements
 8. **Daily Balance** - Growth/Maintenance/Joy activities
 
-## 🏗 Technical Architecture
+## Technical Architecture
 
 ### **Authentication & Privacy**
 
